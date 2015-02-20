@@ -1,9 +1,9 @@
 # go-sdlgui
-SDL GUI library for golang
-
+SDL2 base gui package for go 
 based on veandco's sdl2 binding
-
-in very early stage, see example dir to use
+it's very early stage but usable and has very little UI controls
+(separated from goguelike client )
+see example directory for sample usage.
 
 # Requirements
 
