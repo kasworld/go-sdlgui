@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"time"
 
-	// "github.com/veandco/go-sdl2/sdl"
+	"github.com/veandco/go-sdl2/sdl"
 
 	"github.com/kasworld/actionstat"
 	"github.com/kasworld/htmlcolors"
@@ -20,6 +20,7 @@ func main() {
 		Stat:  actionstat.NewActionStat(),
 		sdlCh: make(chan interface{}, 1),
 	}
+	app.Keys = make(map[sdl.Scancode]bool)
 	app.Run()
 	runtime.UnlockOSThread()
 }
@@ -27,6 +28,7 @@ func main() {
 type App struct {
 	Quit  bool
 	sdlCh chan interface{}
+	Keys  sdlgui.KeyState
 	Stat  *actionstat.ActionStat
 
 	window   *sdlgui.Window
@@ -64,12 +66,17 @@ func (g *App) Run() {
 	for !g.Quit {
 		select {
 		case data := <-g.sdlCh:
+			if g.window.ProcessSDLMouseEvent(data) ||
+				g.Keys.ProcessSDLKeyEvent(data) {
+				g.Quit = true
+			}
 			g.msgtexts.AddText("data %v", data)
 			g.barctrl.SetBar(barlen)
 			barlen += 0.01
 			if barlen > 1 {
 				barlen = 0
 			}
+			g.Stat.Inc()
 
 		case <-timerDrawCh:
 			g.msgtexts.DrawSurface()
@@ -79,7 +86,6 @@ func (g *App) Run() {
 		case <-timerInfoCh:
 			log.Info("stat %v", g.Stat)
 			g.Stat.UpdateLap()
-			g.Stat.Inc()
 		}
 	}
 }

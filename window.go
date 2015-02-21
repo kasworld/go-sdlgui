@@ -41,43 +41,42 @@ type ControlI interface {
 	IsTransparent() bool
 }
 
-type KeyState struct {
-	KeyPressed map[sdl.Scancode]bool
-	Quit       bool
+type KeyState map[sdl.Scancode]bool
+
+func (ks KeyState) ProcessSDLKeyEvent(data interface{}) (quit bool) {
+	quit = false
+	switch t := data.(type) {
+	case *sdl.KeyUpEvent:
+		delete(ks, t.Keysym.Scancode)
+	case *sdl.KeyDownEvent:
+		if t.Repeat == 0 {
+			ks[t.Keysym.Scancode] = true
+		}
+		switch t.Keysym.Scancode {
+		case sdl.SCANCODE_ESCAPE:
+			quit = true
+		}
+	}
+	return
 }
 
-func (w *Window) ProcessSDLEvent() {
-	for {
-		event := sdl.WaitEvent()
-		if event == nil {
-			continue
-		}
-		switch t := event.(type) {
-		case *sdl.MouseMotionEvent:
-			c, x, y, btnstate := w.ProcessMouseMotionEvent(t)
-			c.MouseOver(x, y, btnstate)
-		case *sdl.MouseButtonEvent:
-			c, x, y, n, s := w.ProcessMouseButtonEvent(t)
-			c.MouseButton(x, y, n, s)
-		case *sdl.MouseWheelEvent:
-			c, x, y, dx, dy, btnstate := w.ProcessMouseWheelEvent(t)
-			c.MouseWheel(x, y, dx, dy, btnstate)
-		case *sdl.QuitEvent:
-			log.Printf("quit %v\n", t)
-			return
-		case *sdl.KeyUpEvent:
-			delete(w.Keys.KeyPressed, t.Keysym.Scancode)
-		case *sdl.KeyDownEvent:
-			if t.Repeat == 0 {
-				w.Keys.KeyPressed[t.Keysym.Scancode] = true
-			}
-			switch t.Keysym.Scancode {
-			case sdl.SCANCODE_ESCAPE:
-				return
-			}
-		}
-		// w.UpdateAll()
+func (w *Window) ProcessSDLMouseEvent(data interface{}) (quit bool) {
+	quit = false
+	switch t := data.(type) {
+	case *sdl.MouseMotionEvent:
+		c, x, y, btnstate := w.ProcessMouseMotionEvent(t)
+		c.MouseOver(x, y, btnstate)
+	case *sdl.MouseButtonEvent:
+		c, x, y, n, s := w.ProcessMouseButtonEvent(t)
+		c.MouseButton(x, y, n, s)
+	case *sdl.MouseWheelEvent:
+		c, x, y, dx, dy, btnstate := w.ProcessMouseWheelEvent(t)
+		c.MouseWheel(x, y, dx, dy, btnstate)
+	case *sdl.QuitEvent:
+		// log.Printf("quit %v\n", t)
+		quit = true
 	}
+	return
 }
 
 func SDLEvent2Ch(ch chan<- interface{}) {
@@ -97,7 +96,6 @@ type Window struct {
 	Win              *sdl.Window
 	Rend             *sdl.Renderer
 	Controls         *quadtree.QuadTree
-	Keys             KeyState
 	controlsToUpdate ControlIList
 }
 
@@ -124,7 +122,6 @@ func NewWindow(title string, wx, wy int, show bool) *Window {
 	wr := sdl.Rect{}
 	w.Rend.GetViewport(&wr)
 	w.Controls = quadtree.NewQuadTree(SdlRect2Rect(wr))
-	w.Keys.KeyPressed = make(map[sdl.Scancode]bool)
 	return &w
 }
 func (w *Window) Cleanup() {
