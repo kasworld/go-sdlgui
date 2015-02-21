@@ -12,3 +12,7 @@ See example directory for sample usage.
 # Requirements
 
 https://github.com/veandco/go-sdl2
+
+## korean discription
+
+http://kasw.blogspot.kr/2015/02/go-gui.html
