@@ -14,78 +14,94 @@ import (
 )
 
 func main() {
-	runtime.LockOSThread()
-
-	app := App{
-		Stat:  actionstat.NewActionStat(),
-		SdlCh: make(chan interface{}, 1),
-		Keys:  make(map[sdl.Scancode]bool),
-	}
-	app.Run()
-	runtime.UnlockOSThread()
+	NewApp().Run()
 }
 
 type App struct {
-	Quit  bool
-	SdlCh chan interface{}
-	Keys  sdlgui.KeyState
-	Win   *sdlgui.Window
-	Stat  *actionstat.ActionStat
+	Quit     bool
+	SdlCh    chan interface{}
+	Keys     sdlgui.KeyState
+	Win      *sdlgui.Window
+	Controls sdlgui.ControlIList
 
-	controls []sdlgui.ControlI
-	msgtexts *sdlgui.TextBoxControl
-	barctrl  *sdlgui.TextControl
+	Stat    *actionstat.ActionStat
+	msgtext *sdlgui.TextBoxControl
+	barctrl *sdlgui.TextControl
 }
 
-func (g *App) addControls() {
-	g.Win = sdlgui.NewWindow("", 1024, 800, true)
+func NewApp() *App {
+	app := App{
+		SdlCh: make(chan interface{}, 1),
+		Keys:  make(map[sdl.Scancode]bool),
+		Win:   sdlgui.NewWindow("SDL GUI Example", 1024, 800, true),
 
-	g.msgtexts = sdlgui.NewTextBoxControl(
+		Stat: actionstat.NewActionStat(),
+	}
+	app.addControls()
+	app.Win.UpdateAll()
+	return &app
+}
+
+func (app *App) AddControl(c sdlgui.ControlI) {
+	app.Controls = append(app.Controls, c)
+	app.Win.AddControl(c)
+}
+
+// changed for every app
+
+func (g *App) addControls() {
+	g.msgtext = sdlgui.NewTextBoxControl(
 		0, 0, 0,
 		1024, 720, 60,
 		sdlgui.LoadFont("DejaVuSerif.ttf", 12))
-	g.msgtexts.SetBG(htmlcolors.Gray.ToRGBA())
-	g.Win.AddControl(g.msgtexts)
+	g.msgtext.SetBG(htmlcolors.Gray.ToRGBA())
+	g.AddControl(g.msgtext)
 
 	g.barctrl = sdlgui.NewTextControl(
 		0, 720, 0,
 		1024, 80, "hello",
 		sdlgui.LoadFont("DejaVuSerif.ttf", 36))
 	g.barctrl.SetBG(htmlcolors.Pink.ToRGBA())
-	g.Win.AddControl(g.barctrl)
+	g.AddControl(g.barctrl)
 
-	g.Win.UpdateAll()
 }
 
-func (g *App) Run() {
-	g.addControls()
-	sdlgui.SDLEvent2Ch(g.SdlCh)
+func (app *App) Run() {
+	// need to co-exist sdl lib
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
+	// start sdl event loop
+	sdlgui.SDLEvent2Ch(app.SdlCh)
 	timerInfoCh := time.Tick(time.Duration(1000) * time.Millisecond)
 	timerDrawCh := time.Tick(time.Duration(1000/60) * time.Millisecond)
 	barlen := 0.0
-	for !g.Quit {
+
+	for !app.Quit {
 		select {
-		case data := <-g.SdlCh:
-			if g.Win.ProcessSDLMouseEvent(data) ||
-				g.Keys.ProcessSDLKeyEvent(data) {
-				g.Quit = true
+		case data := <-app.SdlCh:
+			if app.Win.ProcessSDLMouseEvent(data) ||
+				app.Keys.ProcessSDLKeyEvent(data) {
+				app.Quit = true
 			}
-			g.msgtexts.AddText("data %v", data)
-			g.barctrl.SetBar(barlen)
+			app.msgtext.AddText("data %v", data)
+			app.barctrl.SetBar(barlen)
 			barlen += 0.01
 			if barlen > 1 {
 				barlen = 0
 			}
-			g.Stat.Inc()
+			app.Stat.Inc()
 
 		case <-timerDrawCh:
-			g.msgtexts.DrawSurface()
-			g.barctrl.DrawSurface()
-			g.Win.Update()
+			for _, v := range app.Controls {
+				v.DrawSurface()
+			}
+			app.Win.Update()
 
 		case <-timerInfoCh:
-			log.Info("stat %v", g.Stat)
-			g.Stat.UpdateLap()
+			log.Info("stat %v", app.Stat)
+			app.Stat.UpdateLap()
+
 		}
 	}
 }
