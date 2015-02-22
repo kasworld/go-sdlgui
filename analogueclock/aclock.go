@@ -49,7 +49,7 @@ func (tc *Clock) SetTime(t time.Time) {
 	tc.t = t
 }
 
-func (tc *Clock) DrawFace() {
+func (tc *Clock) drawFace() {
 	tc.Rend.SetDrawColor(tc.fg[0], tc.fg[1], tc.fg[2], tc.fg[3])
 	c := tc.GetRect().Center()
 	rx := tc.GetRect().SizeVector()[0]/2 - 3
@@ -65,7 +65,7 @@ func (tc *Clock) DrawFace() {
 	}
 }
 
-func (tc *Clock) DrawHand(co htmlcolors.RGBA, angle float64, l float64) {
+func (tc *Clock) drawHand(co htmlcolors.RGBA, angle float64, l float64) {
 	angle -= 90
 	x1, y1 := tc.W/2, tc.H/2
 	x2 := x1 + int(math.Cos(angle/180*math.Pi)*float64(x1)*l)
@@ -74,7 +74,7 @@ func (tc *Clock) DrawHand(co htmlcolors.RGBA, angle float64, l float64) {
 	tc.Rend.DrawLine(x1, y1, x2, y2)
 }
 
-func (tc *Clock) Time2Angle() (float64, float64, float64) {
+func (tc *Clock) time2Angle() (float64, float64, float64) {
 	h := float64(tc.t.Hour()%12) / 12 * 360
 	m := float64(tc.t.Minute()) / 60 * 360
 	s := float64(tc.t.Second()) / 60 * 360
@@ -90,11 +90,11 @@ func (tc *Clock) DrawSurface() {
 	tc.Rend.SetDrawColor(tc.bg[0], tc.bg[1], tc.bg[2], tc.bg[3])
 	tc.Rend.Clear()
 
-	h, m, s := tc.Time2Angle()
-	tc.DrawFace()
-	tc.DrawHand(tc.hhand, h, 0.60)
-	tc.DrawHand(tc.mhand, m, 0.75)
-	tc.DrawHand(tc.shand, s, 0.90)
+	h, m, s := tc.time2Angle()
+	tc.drawFace()
+	tc.drawHand(tc.hhand, h, 0.60)
+	tc.drawHand(tc.mhand, m, 0.75)
+	tc.drawHand(tc.shand, s, 0.90)
 
 	tc.Rend.Present()
 	tc.Win.AddUpdateControl(tc)
