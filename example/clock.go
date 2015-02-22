@@ -24,6 +24,7 @@ type App struct {
 	Win      *sdlgui.Window
 	Controls sdlgui.ControlIList
 
+	cl   *analogueclock.Clock
 	Stat *actionstat.ActionStat
 }
 
@@ -31,7 +32,7 @@ func NewApp() *App {
 	app := App{
 		SdlCh: make(chan interface{}, 1),
 		Keys:  make(map[sdl.Scancode]bool),
-		Win:   sdlgui.NewWindow("SDL GUI Example", 512, 512, true),
+		Win:   sdlgui.NewWindow("SDL GUI Clock Example", 512, 512, true),
 
 		Stat: actionstat.NewActionStat(),
 	}
@@ -48,8 +49,8 @@ func (app *App) AddControl(c sdlgui.ControlI) {
 // change as app's need
 
 func (g *App) addControls() {
-	c := analogueclock.New()
-	g.AddControl(c)
+	g.cl = analogueclock.New(0, 0, 0, 512, 512)
+	g.AddControl(g.cl)
 
 }
 
@@ -82,7 +83,7 @@ func (app *App) Run() {
 		case <-timerInfoCh:
 			log.Info("stat %v", app.Stat)
 			app.Stat.UpdateLap()
-
+			app.cl.SetTime(time.Now())
 		}
 	}
 }
