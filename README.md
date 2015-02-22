@@ -32,4 +32,6 @@ http://kasw.blogspot.kr/2015/02/go-gui.html
 	"github.com/kasworld/log"
 
 	"github.com/kasworld/go-sdlgui"
-	
+
+![analogueclock screenshot]
+(https://github.com/kasworld/go-sdlgui/blob/master/example/screenshot.png)
