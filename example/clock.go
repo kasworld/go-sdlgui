@@ -7,10 +7,10 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 
 	"github.com/kasworld/actionstat"
-	"github.com/kasworld/htmlcolors"
-	"github.com/kasworld/log"
-
 	"github.com/kasworld/go-sdlgui"
+	"github.com/kasworld/go-sdlgui/analogueclock"
+	// "github.com/kasworld/htmlcolors"
+	"github.com/kasworld/log"
 )
 
 func main() {
@@ -24,16 +24,14 @@ type App struct {
 	Win      *sdlgui.Window
 	Controls sdlgui.ControlIList
 
-	Stat    *actionstat.ActionStat
-	msgtext *sdlgui.TextBoxControl
-	barctrl *sdlgui.TextControl
+	Stat *actionstat.ActionStat
 }
 
 func NewApp() *App {
 	app := App{
 		SdlCh: make(chan interface{}, 1),
 		Keys:  make(map[sdl.Scancode]bool),
-		Win:   sdlgui.NewWindow("SDL GUI Example", 1024, 800, true),
+		Win:   sdlgui.NewWindow("SDL GUI Example", 512, 512, true),
 
 		Stat: actionstat.NewActionStat(),
 	}
@@ -49,27 +47,9 @@ func (app *App) AddControl(c sdlgui.ControlI) {
 
 // change as app's need
 
-type Clock struct {
-	*sdlgui.Control
-	font *sdlgui.Font
-	bg   htmlcolors.RGBA
-	fg   htmlcolors.RGBA
-}
-
 func (g *App) addControls() {
-	g.msgtext = sdlgui.NewTextBoxControl(
-		0, 0, 0,
-		1024, 720, 60,
-		sdlgui.LoadFont("DejaVuSerif.ttf", 12))
-	g.msgtext.SetBG(htmlcolors.Gray.ToRGBA())
-	g.AddControl(g.msgtext)
-
-	g.barctrl = sdlgui.NewTextControl(
-		0, 720, 0,
-		1024, 80, "hello",
-		sdlgui.LoadFont("DejaVuSerif.ttf", 36))
-	g.barctrl.SetBG(htmlcolors.Pink.ToRGBA())
-	g.AddControl(g.barctrl)
+	c := analogueclock.New()
+	g.AddControl(c)
 
 }
 
@@ -83,7 +63,6 @@ func (app *App) Run() {
 
 	timerInfoCh := time.Tick(time.Duration(1000) * time.Millisecond)
 	timerDrawCh := time.Tick(time.Duration(1000/60) * time.Millisecond)
-	barlen := 0.0
 
 	for !app.Quit {
 		select {
@@ -91,12 +70,6 @@ func (app *App) Run() {
 			if app.Win.ProcessSDLMouseEvent(data) ||
 				app.Keys.ProcessSDLKeyEvent(data) {
 				app.Quit = true
-			}
-			app.msgtext.AddText("data %v", data)
-			app.barctrl.SetBar(barlen)
-			barlen += 0.01
-			if barlen > 1 {
-				barlen = 0
 			}
 			app.Stat.Inc()
 

@@ -51,14 +51,14 @@ func (app *App) AddControl(c sdlgui.ControlI) {
 // change as app's need
 
 func (g *App) addControls() {
-	g.msgtext = textbox.NewTextBoxControl(
+	g.msgtext = textbox.New(
 		0, 0, 0,
 		1024, 720, 60,
 		sdlgui.LoadFont("DejaVuSerif.ttf", 12))
 	g.msgtext.SetBG(htmlcolors.Gray.ToRGBA())
 	g.AddControl(g.msgtext)
 
-	g.barctrl = bartext.NewTextControl(
+	g.barctrl = bartext.New(
 		0, 720, 0,
 		1024, 80, "hello",
 		sdlgui.LoadFont("DejaVuSerif.ttf", 36))

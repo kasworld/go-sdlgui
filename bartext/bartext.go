@@ -19,7 +19,7 @@ type TextControl struct {
 	aligndir int
 }
 
-func NewTextControl(x, y, z int, wx, wy int, s string, font *sdlgui.Font) *TextControl {
+func New(x, y, z int, wx, wy int, s string, font *sdlgui.Font) *TextControl {
 	tc := TextControl{
 		sdlgui.NewControl(x, y, z, wx, wy),
 		s,

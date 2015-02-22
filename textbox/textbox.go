@@ -18,7 +18,7 @@ type TextBoxControl struct {
 	linecount int
 }
 
-func NewTextBoxControl(x, y, z int, wx, wy int, linecount int, font *sdlgui.Font) *TextBoxControl {
+func New(x, y, z int, wx, wy int, linecount int, font *sdlgui.Font) *TextBoxControl {
 	tc := TextBoxControl{
 		sdlgui.NewControl(x, y, z, wx, wy),
 		font,
