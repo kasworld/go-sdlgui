@@ -1,32 +1,33 @@
-package sdlgui
+package bartext
 
 import (
 	"fmt"
 
 	"github.com/veandco/go-sdl2/sdl"
 
+	"github.com/kasworld/go-sdlgui"
 	"github.com/kasworld/htmlcolors"
 )
 
 type TextControl struct {
-	*Control
+	*sdlgui.Control
 	text     string
-	font     *Font
+	font     *sdlgui.Font
 	bg       htmlcolors.RGBA
 	fg       htmlcolors.RGBA
 	bar      float64
 	aligndir int
 }
 
-func NewTextControl(x, y, z int, wx, wy int, s string, font *Font) *TextControl {
+func NewTextControl(x, y, z int, wx, wy int, s string, font *sdlgui.Font) *TextControl {
 	tc := TextControl{
-		NewControl(x, y, z, wx, wy),
+		sdlgui.NewControl(x, y, z, wx, wy),
 		s,
 		font,
 		htmlcolors.Black.ToRGBA(),
 		htmlcolors.White.ToRGBA(),
 		1.0,
-		Align_Left,
+		sdlgui.Align_Left,
 	}
 	tc.BorderSize = 2
 	tc.BorderType = 1
@@ -53,12 +54,12 @@ func (tc *TextControl) DrawSurface() {
 
 	torect := tc.GetClientConnRect().ShrinkSym(int(tc.BorderSize))
 	if srcRect.W < int32(torect.W) {
-		dstRect := SdlInRectAlign(torect, srcRect, tc.aligndir)
+		dstRect := sdlgui.SdlInRectAlign(torect, srcRect, tc.aligndir)
 		surface.Blit(&srcRect, tc.Suf, &dstRect)
 	} else {
 		tsrcRect := srcRect
 		tsrcRect.W = int32(tc.W)
-		dstRect := SdlInRectAlign(torect, tsrcRect, tc.aligndir)
+		dstRect := sdlgui.SdlInRectAlign(torect, tsrcRect, tc.aligndir)
 		surface.BlitScaled(&srcRect, tc.Suf, &dstRect)
 	}
 

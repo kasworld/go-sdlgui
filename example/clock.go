@@ -7,11 +7,10 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 
 	"github.com/kasworld/actionstat"
-	"github.com/kasworld/go-sdlgui"
-	"github.com/kasworld/go-sdlgui/bartext"
-	"github.com/kasworld/go-sdlgui/textbox"
 	"github.com/kasworld/htmlcolors"
 	"github.com/kasworld/log"
+
+	"github.com/kasworld/go-sdlgui"
 )
 
 func main() {
@@ -26,8 +25,8 @@ type App struct {
 	Controls sdlgui.ControlIList
 
 	Stat    *actionstat.ActionStat
-	msgtext *textbox.TextBoxControl
-	barctrl *bartext.TextControl
+	msgtext *sdlgui.TextBoxControl
+	barctrl *sdlgui.TextControl
 }
 
 func NewApp() *App {
@@ -50,15 +49,22 @@ func (app *App) AddControl(c sdlgui.ControlI) {
 
 // change as app's need
 
+type Clock struct {
+	*sdlgui.Control
+	font *sdlgui.Font
+	bg   htmlcolors.RGBA
+	fg   htmlcolors.RGBA
+}
+
 func (g *App) addControls() {
-	g.msgtext = textbox.NewTextBoxControl(
+	g.msgtext = sdlgui.NewTextBoxControl(
 		0, 0, 0,
 		1024, 720, 60,
 		sdlgui.LoadFont("DejaVuSerif.ttf", 12))
 	g.msgtext.SetBG(htmlcolors.Gray.ToRGBA())
 	g.AddControl(g.msgtext)
 
-	g.barctrl = bartext.NewTextControl(
+	g.barctrl = sdlgui.NewTextControl(
 		0, 720, 0,
 		1024, 80, "hello",
 		sdlgui.LoadFont("DejaVuSerif.ttf", 36))

@@ -1,25 +1,26 @@
-package sdlgui
+package textbox
 
 import (
 	"fmt"
 
 	"github.com/veandco/go-sdl2/sdl"
 
+	"github.com/kasworld/go-sdlgui"
 	"github.com/kasworld/htmlcolors"
 )
 
 type TextBoxControl struct {
-	*Control
-	font      *Font
+	*sdlgui.Control
+	font      *sdlgui.Font
 	bg        htmlcolors.RGBA
 	fg        htmlcolors.RGBA
 	texts     []string
 	linecount int
 }
 
-func NewTextBoxControl(x, y, z int, wx, wy int, linecount int, font *Font) *TextBoxControl {
+func NewTextBoxControl(x, y, z int, wx, wy int, linecount int, font *sdlgui.Font) *TextBoxControl {
 	tc := TextBoxControl{
-		NewControl(x, y, z, wx, wy),
+		sdlgui.NewControl(x, y, z, wx, wy),
 		font,
 		htmlcolors.Black.ToRGBA(),
 		htmlcolors.White.ToRGBA(),

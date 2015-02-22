@@ -3,7 +3,6 @@ package sdlgui
 import (
 	"github.com/veandco/go-sdl2/sdl"
 
-	"github.com/kasworld/htmlcolors"
 	"github.com/kasworld/idgen"
 	"github.com/kasworld/log"
 	"github.com/kasworld/rect"
@@ -15,22 +14,6 @@ const (
 	Bmask = 0x00ff0000
 	Amask = 0xff000000
 )
-
-type OverlayFilter []htmlcolors.RGBA
-
-func MakeOverlayFilter(n int, b htmlcolors.RGBA) OverlayFilter {
-	rtn := make(OverlayFilter, n)
-	for i := 0; i < n; i++ {
-		for j, v := range b {
-			if int(v) < i*256/n {
-				rtn[i][j] = 0
-			} else {
-				rtn[i][j] = v - uint8(i*256/n)
-			}
-		}
-	}
-	return rtn
-}
 
 // QuadTreeObjI
 func (c *Control) GetRect() rect.Rect {
