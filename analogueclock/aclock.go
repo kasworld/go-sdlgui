@@ -8,37 +8,45 @@ import (
 	"github.com/kasworld/htmlcolors"
 )
 
+const (
+	CO_bg = iota
+	CO_face
+	CO_daial
+	CO_hhand
+	CO_mhand
+	CO_shand
+	CO_End
+)
+
 type Clock struct {
 	*sdlgui.Control
-	bg    htmlcolors.RGBA
-	fg    htmlcolors.RGBA
-	hhand htmlcolors.RGBA
-	mhand htmlcolors.RGBA
-	shand htmlcolors.RGBA
-	t     time.Time
+	colors [CO_End]htmlcolors.RGBA
+	t      time.Time
 }
 
 func New(x, y, z int, wx, wy int) *Clock {
 	c := Clock{
 		sdlgui.NewControl(x, y, z, wx, wy),
-		htmlcolors.Black.ToRGBA(),
-		htmlcolors.White.ToRGBA(),
-		htmlcolors.Green.ToRGBA(),
-		htmlcolors.Blue.ToRGBA(),
-		htmlcolors.Red.ToRGBA(),
+		[CO_End]htmlcolors.RGBA{
+			htmlcolors.Black.ToRGBA(),
+			htmlcolors.Gray.ToRGBA(),
+			htmlcolors.White.ToRGBA(),
+			htmlcolors.Green.ToRGBA(),
+			htmlcolors.Blue.ToRGBA(),
+			htmlcolors.Red.ToRGBA(),
+		},
 		time.Now(),
 	}
-	c.BorderSize = 2
-	c.BorderType = 1
+	c.BorderType = 0
 	return &c
 }
 
-func (tc *Clock) SetBG(bg htmlcolors.RGBA) {
-	if bg == tc.bg {
+func (tc *Clock) SetColor(n int, co htmlcolors.RGBA) {
+	if co == tc.colors[n] {
 		return
 	}
 	tc.ContentsChanged = true
-	tc.bg = bg
+	tc.colors[n] = co
 }
 
 func (tc *Clock) SetTime(t time.Time) {
@@ -50,10 +58,10 @@ func (tc *Clock) SetTime(t time.Time) {
 }
 
 func (tc *Clock) drawFace() {
-	tc.Rend.SetDrawColor(tc.fg[0], tc.fg[1], tc.fg[2], tc.fg[3])
+	tc.Rend.SetDrawColor(tc.colors[CO_face][0], tc.colors[CO_face][1], tc.colors[CO_face][2], tc.colors[CO_face][3])
 	c := tc.GetRect().Center()
-	rx := tc.GetRect().SizeVector()[0]/2 - 3
-	ry := tc.GetRect().SizeVector()[1]/2 - 3
+	rx := tc.GetRect().SizeVector()[0] / 2
+	ry := tc.GetRect().SizeVector()[1] / 2
 	rate := float64(ry) / float64(rx)
 	for x := -rx; x < rx; x++ {
 		theta := math.Acos(float64(x) / float64(rx))
@@ -90,10 +98,10 @@ func (tc *Clock) drawDialLine(co htmlcolors.RGBA, angle float64, s, e float64) {
 
 func (tc *Clock) drawDials() {
 	for a := 0.0; a < 360; a += 6 {
-		tc.drawDialLine(htmlcolors.Black.ToRGBA(), a, 0.95, 1.0)
+		tc.drawDialLine(tc.colors[CO_daial], a, 0.95, 0.99)
 	}
 	for a := 0.0; a < 360; a += 6 * 5 {
-		tc.drawDialLine(htmlcolors.Black.ToRGBA(), a, 0.90, 1.0)
+		tc.drawDialLine(tc.colors[CO_daial], a, 0.90, 0.99)
 	}
 }
 
@@ -115,15 +123,15 @@ func (tc *Clock) DrawSurface() {
 	}
 	tc.ContentsChanged = false
 
-	tc.Rend.SetDrawColor(tc.bg[0], tc.bg[1], tc.bg[2], tc.bg[3])
+	tc.Rend.SetDrawColor(tc.colors[CO_bg][0], tc.colors[CO_bg][1], tc.colors[CO_bg][2], tc.colors[CO_bg][3])
 	tc.Rend.Clear()
 
 	h, m, s := tc.time2Angle()
 	tc.drawFace()
 	tc.drawDials()
-	tc.drawHand(tc.hhand, h, 0.60)
-	tc.drawHand(tc.mhand, m, 0.75)
-	tc.drawHand(tc.shand, s, 0.90)
+	tc.drawHand(tc.colors[CO_hhand], h, 0.60)
+	tc.drawHand(tc.colors[CO_mhand], m, 0.75)
+	tc.drawHand(tc.colors[CO_shand], s, 0.90)
 
 	tc.Rend.Present()
 	tc.Win.AddUpdateControl(tc)
