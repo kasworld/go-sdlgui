@@ -51,7 +51,6 @@ func (app *App) AddControl(c sdlgui.ControlI) {
 func (g *App) addControls() {
 	g.cl = analogueclock.New(0, 0, 0, 512, 512)
 	g.AddControl(g.cl)
-
 }
 
 func (app *App) Run() {
@@ -63,7 +62,7 @@ func (app *App) Run() {
 	sdlgui.SDLEvent2Ch(app.SdlCh)
 
 	timerInfoCh := time.Tick(time.Duration(1000) * time.Millisecond)
-	timerDrawCh := time.Tick(time.Duration(1000/60) * time.Millisecond)
+	timerDrawCh := time.Tick(time.Duration(1000/30) * time.Millisecond)
 
 	for !app.Quit {
 		select {
@@ -75,6 +74,7 @@ func (app *App) Run() {
 			app.Stat.Inc()
 
 		case <-timerDrawCh:
+			app.cl.SetTime(time.Now())
 			for _, v := range app.Controls {
 				v.DrawSurface()
 			}
@@ -83,7 +83,6 @@ func (app *App) Run() {
 		case <-timerInfoCh:
 			log.Info("stat %v", app.Stat)
 			app.Stat.UpdateLap()
-			app.cl.SetTime(time.Now())
 		}
 	}
 }

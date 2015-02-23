@@ -65,20 +65,48 @@ func (tc *Clock) drawFace() {
 	}
 }
 
-func (tc *Clock) drawHand(co htmlcolors.RGBA, angle float64, l float64) {
+func (tc *Clock) getFacePos(angle float64, l float64) (int, int) {
 	angle -= 90
-	x1, y1 := tc.W/2, tc.H/2
-	x2 := x1 + int(math.Cos(angle/180*math.Pi)*float64(x1)*l)
-	y2 := y1 + int(math.Sin(angle/180*math.Pi)*float64(y1)*l)
+	xc, yc := tc.W/2, tc.H/2
+	x := xc + int(math.Cos(angle/180*math.Pi)*float64(xc)*l)
+	y := yc + int(math.Sin(angle/180*math.Pi)*float64(yc)*l)
+	return x, y
+}
+
+func (tc *Clock) drawHand(co htmlcolors.RGBA, angle float64, l float64) {
+	// x1, y1 := tc.W/2, tc.H/2
+	x1, y1 := tc.getFacePos(angle, -l/5)
+	x2, y2 := tc.getFacePos(angle, l)
 	tc.Rend.SetDrawColor(co[0], co[1], co[2], co[3])
 	tc.Rend.DrawLine(x1, y1, x2, y2)
 }
 
+func (tc *Clock) drawDialLine(co htmlcolors.RGBA, angle float64, s, e float64) {
+	x1, y1 := tc.getFacePos(angle, s)
+	x2, y2 := tc.getFacePos(angle, e)
+	tc.Rend.SetDrawColor(co[0], co[1], co[2], co[3])
+	tc.Rend.DrawLine(x1, y1, x2, y2)
+}
+
+func (tc *Clock) drawDials() {
+	for a := 0.0; a < 360; a += 6 {
+		tc.drawDialLine(htmlcolors.Black.ToRGBA(), a, 0.95, 1.0)
+	}
+	for a := 0.0; a < 360; a += 6 * 5 {
+		tc.drawDialLine(htmlcolors.Black.ToRGBA(), a, 0.90, 1.0)
+	}
+}
+
 func (tc *Clock) time2Angle() (float64, float64, float64) {
-	h := float64(tc.t.Hour()%12) / 12 * 360
-	m := float64(tc.t.Minute()) / 60 * 360
-	s := float64(tc.t.Second()) / 60 * 360
-	return h, m, s
+	ms := float64(tc.t.Nanosecond()/1000000) / 1000
+	s := (float64(tc.t.Second()) + ms)
+	m := (float64(tc.t.Minute()) + s/60)
+	h := (float64(tc.t.Hour()%12) + m/60)
+
+	sa := s / 60 * 360
+	ma := m / 60 * 360
+	ha := h / 12 * 360
+	return ha, ma, sa
 }
 
 func (tc *Clock) DrawSurface() {
@@ -92,6 +120,7 @@ func (tc *Clock) DrawSurface() {
 
 	h, m, s := tc.time2Angle()
 	tc.drawFace()
+	tc.drawDials()
 	tc.drawHand(tc.hhand, h, 0.60)
 	tc.drawHand(tc.mhand, m, 0.75)
 	tc.drawHand(tc.shand, s, 0.90)
