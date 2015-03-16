@@ -1,5 +1,5 @@
 # go-sdlgui
-SDL2 base GUI package for go 
+SDL2 base GUI package for go
 
 Based on veandco's sdl2 binding
 
@@ -11,7 +11,13 @@ See example directory for sample usage.
 
 # Requirements
 
-https://github.com/veandco/go-sdl2
+changed to use forked version of
+
+	https://github.com/veandco/go-sdl2
+
+use
+
+	"github.com/kasworld/go-sdl2/sdl"
 
 ## korean discription
 
@@ -25,7 +31,7 @@ http://kasw.blogspot.kr/2015/02/go-gui.html
 	"github.com/kasworld/rect"
 	"github.com/kasworld/htmlcolors"
 
-## Requirements for example 
+## Requirements for example
 
 	"github.com/kasworld/actionstat"
 	"github.com/kasworld/htmlcolors"
@@ -38,4 +44,3 @@ http://kasw.blogspot.kr/2015/02/go-gui.html
 
 ![analogueclock screenshot]
 (https://github.com/kasworld/go-sdlgui/blob/master/example/hangulscreenshot.png)
-
