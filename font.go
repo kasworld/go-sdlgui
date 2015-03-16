@@ -31,7 +31,7 @@ func LoadFont(filename string, size int) *Font {
 	}
 }
 func (f *Font) MakeSurface(co htmlcolors.RGBA, text string) (*sdl.Surface, sdl.Rect) {
-	surface := f.Font.RenderText_Blended(text, RGBA2SDL(co))
+	surface := f.Font.RenderUTF8_Blended(text, RGBA2SDL(co))
 	// surface := f.Font.RenderText_Solid(text, co.SdlColor())
 	// surface := f.Font.RenderText_Shaded(text, co.SdlColor(), co.Neg().SdlColor())
 	if surface == nil {

@@ -53,14 +53,18 @@ func (g *App) addControls() {
 	g.msgtext = textbox.New(
 		0, 0, 0,
 		1024, 720, 60,
-		sdlgui.LoadFont("DejaVuSerif.ttf", 12))
+		sdlgui.LoadFont("NanumGothic.ttf", 12))
 	g.msgtext.SetBG(htmlcolors.Gray.ToRGBA())
 	g.AddControl(g.msgtext)
 
+	dispstr := "안녕"
+	println(dispstr)
+	log.Printf("%v %x %+q", dispstr, dispstr, dispstr)
+
 	g.barctrl = bartext.New(
 		0, 720, 0,
-		1024, 80, "hello",
-		sdlgui.LoadFont("DejaVuSerif.ttf", 36))
+		1024, 80, dispstr,
+		sdlgui.LoadFont("NanumGothic.ttf", 36))
 	g.barctrl.SetBG(htmlcolors.Pink.ToRGBA())
 	g.AddControl(g.barctrl)
 
