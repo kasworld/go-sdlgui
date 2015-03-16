@@ -3,8 +3,7 @@ package sdlgui
 import (
 	"sort"
 
-	"github.com/veandco/go-sdl2/sdl"
-
+	"github.com/kasworld/go-sdl2/sdl"
 	"github.com/kasworld/idgen"
 	"github.com/kasworld/log"
 	"github.com/kasworld/quadtree"

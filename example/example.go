@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/veandco/go-sdl2/sdl"
+	"github.com/kasworld/go-sdl2/sdl"
 
 	"github.com/kasworld/actionstat"
 	"github.com/kasworld/go-sdlgui"

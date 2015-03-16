@@ -3,7 +3,7 @@ package bartext
 import (
 	"fmt"
 
-	"github.com/veandco/go-sdl2/sdl"
+	"github.com/kasworld/go-sdl2/sdl"
 
 	"github.com/kasworld/go-sdlgui"
 	"github.com/kasworld/htmlcolors"

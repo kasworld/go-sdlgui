@@ -1,8 +1,8 @@
 package sdlgui
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/sdl_image"
+	"github.com/kasworld/go-sdl2/sdl"
+	"github.com/kasworld/go-sdl2/sdl_image"
 
 	"github.com/kasworld/htmlcolors"
 	"github.com/kasworld/log"
