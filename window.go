@@ -23,20 +23,21 @@ func NewWindow(title string, wx, wy int, show bool) *Window {
 	w := Window{
 		ID: <-idgen.GenCh(),
 	}
+	var err error
 	if show {
-		w.Win = sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
+		w.Win, err = sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
 			wx, wy, sdl.WINDOW_SHOWN)
 	} else {
-		w.Win = sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
+		w.Win, err = sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
 			wx, wy, sdl.WINDOW_HIDDEN)
 	}
-	if w.Win == nil {
-		log.Fatalf("Failed to create window: %s\n", sdl.GetError())
+	if err != nil {
+		log.Fatalf("Failed to create window: %s\n", err)
 	}
 	// w.Rend = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_SOFTWARE)
-	w.Rend = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_ACCELERATED)
-	if w.Rend == nil {
-		log.Fatalf("Failed to create renderer: %s\n", sdl.GetError())
+	w.Rend, err = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_ACCELERATED)
+	if err != nil {
+		log.Fatalf("Failed to create renderer: %s\n", err)
 	}
 
 	wr := sdl.Rect{}

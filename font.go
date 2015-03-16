@@ -68,9 +68,9 @@ func (f *Font) GetSurfaceWithCache(co htmlcolors.RGBA, text string) (*sdl.Surfac
 func (f *Font) MakeTexture(co htmlcolors.RGBA, text string, rend *sdl.Renderer) (*sdl.Texture, sdl.Rect) {
 	surface, srcRect := f.MakeSurface(co, text)
 	defer surface.Free()
-	t := rend.CreateTextureFromSurface(surface)
-	if t == nil {
-		log.Fatalf("Failed to create Texture: %s\n", sdl.GetError())
+	t, err := rend.CreateTextureFromSurface(surface)
+	if err != nil {
+		log.Fatalf("Failed to create Texture: %s\n", err)
 	}
 	return t, srcRect
 }

@@ -27,16 +27,16 @@ func Rect2SdlRect(rt rect.Rect) sdl.Rect {
 }
 
 func LoadBMP(imageName string) *sdl.Surface {
-	image := sdl.LoadBMP(imageName)
-	if image == nil {
-		log.Fatalf("Failed to load BMP: %s", sdl.GetError())
+	image, err := sdl.LoadBMP(imageName)
+	if err != nil {
+		log.Fatalf("Failed to load BMP: %s", err)
 	}
 	return image
 }
 func LoadImage(imageName string) *sdl.Surface {
-	image := img.Load(imageName)
-	if image == nil {
-		log.Fatalf("Failed to load Image: %s", sdl.GetError())
+	image, err := img.Load(imageName)
+	if err != nil {
+		log.Fatalf("Failed to load Image: %s", err)
 	}
 	return image
 }

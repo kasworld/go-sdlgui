@@ -32,9 +32,9 @@ func (c *Control) UpdateContents() {
 func (c *Control) DrawSurface() {
 }
 func (c *Control) UpdateToWindow() {
-	t := c.Win.Rend.CreateTextureFromSurface(c.Suf)
-	if t == nil {
-		log.Fatalf("Failed to create Texture: %s\n", sdl.GetError())
+	t, err := c.Win.Rend.CreateTextureFromSurface(c.Suf)
+	if err != nil {
+		log.Fatalf("Failed to create Texture: %s\n", err)
 	}
 	defer t.Destroy()
 	srcrect := sdl.Rect{}
@@ -102,14 +102,15 @@ func NewControl(x, y, z int, wx, wy int) *Control {
 		BorderSize:      0,
 		BorderType:      0,
 	}
-	c.Suf = sdl.CreateRGBSurface(0, int32(c.W), int32(c.H), 32,
+	var err error
+	c.Suf, err = sdl.CreateRGBSurface(0, int32(c.W), int32(c.H), 32,
 		Rmask, Gmask, Bmask, Amask)
-	if c.Suf == nil {
-		log.Fatalf("Failed to create surface: %s\n", sdl.GetError())
+	if err != nil {
+		log.Fatalf("Failed to create surface: %s\n", err)
 	}
-	c.Rend = sdl.CreateSoftwareRenderer(c.Suf)
-	if c.Rend == nil {
-		log.Fatalf("Failed to create renderer: %s\n", sdl.GetError())
+	c.Rend, err = sdl.CreateSoftwareRenderer(c.Suf)
+	if err != nil {
+		log.Fatalf("Failed to create renderer: %s\n", err)
 	}
 	return &c
 }
@@ -134,9 +135,9 @@ func (c *Control) Cleanup() {
 	}
 }
 func (c *Control) MakeTexture(surface *sdl.Surface) *sdl.Texture {
-	t := c.Rend.CreateTextureFromSurface(surface)
-	if t == nil {
-		log.Fatalf("Failed to create Texture: %s\n", sdl.GetError())
+	t, err := c.Rend.CreateTextureFromSurface(surface)
+	if err != nil {
+		log.Fatalf("Failed to create Texture: %s\n", err)
 	}
 	return t
 }
