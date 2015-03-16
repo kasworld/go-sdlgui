@@ -32,8 +32,6 @@ func LoadFont(filename string, size int) *Font {
 }
 func (f *Font) MakeSurface(co htmlcolors.RGBA, text string) (*sdl.Surface, sdl.Rect) {
 	surface := f.Font.RenderUTF8_Blended(text, RGBA2SDL(co))
-	// surface := f.Font.RenderText_Solid(text, co.SdlColor())
-	// surface := f.Font.RenderText_Shaded(text, co.SdlColor(), co.Neg().SdlColor())
 	if surface == nil {
 		log.Printf("%v %v", co, text)
 		log.Fatalf("Failed to create surface: %s\n", sdl.GetError())
@@ -42,16 +40,7 @@ func (f *Font) MakeSurface(co htmlcolors.RGBA, text string) (*sdl.Surface, sdl.R
 	surface.GetClipRect(&srcRect)
 	return surface, srcRect
 }
-func (f *Font) MakeSurface2(fg, bg htmlcolors.RGBA, text string) (*sdl.Surface, sdl.Rect) {
-	surface := f.Font.RenderText_Shaded(text, RGBA2SDL(fg), RGBA2SDL(bg))
-	if surface == nil {
-		// log.Printf("%v %v", co, text)
-		log.Fatalf("Failed to create surface: %s\n", sdl.GetError())
-	}
-	srcRect := sdl.Rect{}
-	surface.GetClipRect(&srcRect)
-	return surface, srcRect
-}
+
 func (f *Font) GetSurfaceWithCache(co htmlcolors.RGBA, text string) (*sdl.Surface, sdl.Rect) {
 	surface := f.Cache[FontKey{co, text}]
 	if surface != nil {
