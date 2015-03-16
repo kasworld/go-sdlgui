@@ -4,9 +4,8 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kasworld/go-sdl2/sdl"
-
 	"github.com/kasworld/actionstat"
+	"github.com/kasworld/go-sdl2/sdl"
 	"github.com/kasworld/go-sdlgui"
 	"github.com/kasworld/go-sdlgui/bartext"
 	"github.com/kasworld/go-sdlgui/textbox"

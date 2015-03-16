@@ -3,7 +3,6 @@ package sdlgui
 import (
 	"github.com/kasworld/go-sdl2/sdl"
 	"github.com/kasworld/go-sdl2/sdl_ttf"
-
 	"github.com/kasworld/htmlcolors"
 	"github.com/kasworld/log"
 )

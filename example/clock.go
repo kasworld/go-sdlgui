@@ -4,12 +4,10 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kasworld/go-sdl2/sdl"
-
 	"github.com/kasworld/actionstat"
+	"github.com/kasworld/go-sdl2/sdl"
 	"github.com/kasworld/go-sdlgui"
 	"github.com/kasworld/go-sdlgui/analogueclock"
-	// "github.com/kasworld/htmlcolors"
 	"github.com/kasworld/log"
 )
 

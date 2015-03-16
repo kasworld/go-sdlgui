@@ -2,7 +2,6 @@ package sdlgui
 
 import (
 	"github.com/kasworld/go-sdl2/sdl"
-
 	"github.com/kasworld/idgen"
 	"github.com/kasworld/log"
 	"github.com/kasworld/rect"
