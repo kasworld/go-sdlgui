@@ -35,3 +35,7 @@ http://kasw.blogspot.kr/2015/02/go-gui.html
 
 ![analogueclock screenshot]
 (https://github.com/kasworld/go-sdlgui/blob/master/example/screenshot.png)
+
+![analogueclock screenshot]
+(https://github.com/kasworld/go-sdlgui/blob/master/example/hangulscreenshot.png)
+
