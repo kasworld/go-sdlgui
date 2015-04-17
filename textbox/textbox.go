@@ -46,7 +46,7 @@ func (tc *TextBoxControl) DrawSurface() {
 		surface, srcRect := tc.font.MakeSurface(tc.fg, text)
 		defer surface.Free()
 		dstRect := sdl.Rect{
-			tc.BorderSize, int32(i * int(tc.H) / tc.linecount),
+			tc.BorderSize, int32(i*int(tc.H)/tc.linecount) - tc.BorderSize,
 			srcRect.W*int32(tc.H/tc.linecount)/srcRect.H - tc.BorderSize, int32(tc.H / tc.linecount),
 		}
 		if dstRect.W < int32(tc.W) {

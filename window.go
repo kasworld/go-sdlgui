@@ -161,23 +161,35 @@ func (w *Window) FindControl(x, y int) ControlI {
 func (w *Window) ProcessMouseEvent() (ControlI, int, int, uint32) {
 	mx, my, btnstate := sdl.GetMouseState()
 	c := w.FindControl(int(mx), int(my))
+	if c == nil {
+		return c, 0, 0, btnstate
+	}
 	cx, cy := int(mx)-c.GetRect().X, int(my)-c.GetRect().Y
 	return c, cx, cy, btnstate
 }
 func (w *Window) ProcessMouseMotionEvent(t *sdl.MouseMotionEvent) (ControlI, int, int, uint32) {
 	_, _, btnstate := sdl.GetMouseState()
 	c := w.FindControl(int(t.X), int(t.Y))
+	if c == nil {
+		return c, 0, 0, btnstate
+	}
 	cx, cy := int(t.X)-c.GetRect().X, int(t.Y)-c.GetRect().Y
 	return c, cx, cy, btnstate
 }
 func (w *Window) ProcessMouseButtonEvent(t *sdl.MouseButtonEvent) (ControlI, int, int, uint8, uint8) {
 	c := w.FindControl(int(t.X), int(t.Y))
+	if c == nil {
+		return c, 0, 0, t.Button, t.State
+	}
 	cx, cy := int(t.X)-c.GetRect().X, int(t.Y)-c.GetRect().Y
 	return c, cx, cy, t.Button, t.State
 }
 func (w *Window) ProcessMouseWheelEvent(t *sdl.MouseWheelEvent) (ControlI, int, int, int32, int32, uint32) {
 	mx, my, btnstate := sdl.GetMouseState()
 	c := w.FindControl(mx, my)
+	if c == nil {
+		return c, 0, 0, t.X, t.Y, btnstate
+	}
 	cx, cy := mx-c.GetRect().X, my-c.GetRect().Y
 	return c, cx, cy, t.X, t.Y, btnstate
 }

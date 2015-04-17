@@ -28,13 +28,19 @@ func (w *Window) ProcessSDLMouseEvent(data interface{}) (quit bool) {
 	switch t := data.(type) {
 	case *sdl.MouseMotionEvent:
 		c, x, y, btnstate := w.ProcessMouseMotionEvent(t)
-		c.MouseOver(x, y, btnstate)
+		if c != nil {
+			c.MouseOver(x, y, btnstate)
+		}
 	case *sdl.MouseButtonEvent:
 		c, x, y, n, s := w.ProcessMouseButtonEvent(t)
-		c.MouseButton(x, y, n, s)
+		if c != nil {
+			c.MouseButton(x, y, n, s)
+		}
 	case *sdl.MouseWheelEvent:
 		c, x, y, dx, dy, btnstate := w.ProcessMouseWheelEvent(t)
-		c.MouseWheel(x, y, dx, dy, btnstate)
+		if c != nil {
+			c.MouseWheel(x, y, dx, dy, btnstate)
+		}
 	case *sdl.QuitEvent:
 		// log.Printf("quit %v\n", t)
 		quit = true
