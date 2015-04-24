@@ -41,7 +41,7 @@ func NewWindow(title string, wx, wy int, show bool) *Window {
 
 	wr := sdl.Rect{}
 	w.Rend.GetViewport(&wr)
-	w.Controls = quadtree.NewQuadTree(SdlRect2Rect(wr))
+	w.Controls = quadtree.New(SdlRect2Rect(wr))
 	return &w
 }
 func (w *Window) Cleanup() {
