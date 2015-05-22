@@ -1,3 +1,14 @@
+// Copyright 2015 SeukWon Kang (kasworld@gmail.com)
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//    http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package sdlgui
 
 import (
@@ -6,7 +17,7 @@ import (
 )
 
 const (
-	Align_Center = iota
+	Align_Center = uint8(iota)
 	Align_Up
 	Align_UpRight
 	Align_Right
@@ -30,7 +41,7 @@ var AlignVt = [...][2]int{
 }
 
 // rect inner align
-func SdlInRectAlign(dst rect.Rect, src sdl.Rect, aligndir int) sdl.Rect {
+func SdlInRectAlign(dst rect.Rect, src sdl.Rect, aligndir uint8) sdl.Rect {
 	rtn := src
 	vt := AlignVt[aligndir]
 	switch vt[0] {
@@ -53,7 +64,7 @@ func SdlInRectAlign(dst rect.Rect, src sdl.Rect, aligndir int) sdl.Rect {
 }
 
 // point base align
-func SdlDestRect(src sdl.Rect, x, y int32, aligndir int) sdl.Rect {
+func SdlDestRect(src sdl.Rect, x, y int32, aligndir uint8) sdl.Rect {
 	rtn := sdl.Rect{x, y, src.W, src.H}
 	vt := AlignVt[aligndir]
 	rtn.X = x + src.W/2*(int32(vt[0])-1)
