@@ -27,6 +27,14 @@ func (s ControlIList) Less(i, j int) bool {
 	return s[i].GetZ() < s[j].GetZ()
 }
 
+// for overriding
+type MouseOverFn func(x, y int, btnstate uint32)
+type MouseButtonFn func(x, y int, btnnum uint8, btnstate uint8)
+type MouseWheelFn func(x, y int, dx int32, dy int32, btnstate uint32)
+type UpdateContentsFn func()
+type DrawSurfaceFn func()
+type UpdateToWindowFn func()
+
 type ControlI interface {
 	quadtree.QuadTreeObjI
 

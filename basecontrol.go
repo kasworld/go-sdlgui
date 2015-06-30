@@ -38,10 +38,23 @@ func (c *Control) GetID() idgen.IDInt {
 
 // ControlI
 func (c *Control) UpdateContents() {
+	if c.UpdateContentsFn != nil {
+		c.UpdateContentsFn()
+		return
+	}
 }
 func (c *Control) DrawSurface() {
+	if c.DrawSurfaceFn != nil {
+		c.DrawSurfaceFn()
+		return
+	}
 }
 func (c *Control) UpdateToWindow() {
+	if c.UpdateToWindowFn != nil {
+		c.UpdateToWindowFn()
+		return
+	}
+
 	t, err := c.Win.Rend.CreateTextureFromSurface(c.Suf)
 	if err != nil {
 		log.Fatalf("Failed to create Texture: %s\n", err)
@@ -64,10 +77,22 @@ func (c *Control) SetWindow(w *Window) {
 	c.Win = w
 }
 func (c *Control) MouseOver(x, y int, btnstate uint32) {
+	if c.MouseOverFn != nil {
+		c.MouseOverFn(x, y, btnstate)
+		return
+	}
 }
 func (c *Control) MouseButton(x, y int, btnnum uint8, btnstate uint8) {
+	if c.MouseButtonFn != nil {
+		c.MouseButtonFn(x, y, btnnum, btnstate)
+		return
+	}
 }
 func (c *Control) MouseWheel(x, y int, dx int32, dy int32, btnstate uint32) {
+	if c.MouseWheelFn != nil {
+		c.MouseWheelFn(x, y, dx, dy, btnstate)
+		return
+	}
 }
 func (c *Control) GetZ() int {
 	return c.Z
@@ -99,6 +124,14 @@ type Control struct {
 	ContentsChanged bool
 	BorderSize      int32
 	BorderType      int
+
+	// overriding
+	MouseOverFn      MouseOverFn
+	MouseButtonFn    MouseButtonFn
+	MouseWheelFn     MouseWheelFn
+	UpdateContentsFn UpdateContentsFn
+	DrawSurfaceFn    DrawSurfaceFn
+	UpdateToWindowFn UpdateToWindowFn
 }
 
 func NewControl(x, y, z int, wx, wy int) *Control {
@@ -200,4 +233,10 @@ func (c *Control) DrawBorderWhiteHard() {
 		c.Win.Rend.SetDrawColor(255, 255, 255, uint8(255-i*256/c.BorderSize))
 		c.Win.Rend.DrawRect(&r)
 	}
+}
+
+func (c *Control) UpdateNow() {
+	c.UpdateContents()
+	c.DrawSurface()
+	c.Win.AddUpdateControl(c)
 }

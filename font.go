@@ -19,6 +19,7 @@ import (
 )
 
 func init() {
+	// println("init ttf")
 	ttf.Init()
 }
 
