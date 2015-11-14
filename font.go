@@ -35,7 +35,7 @@ type Font struct {
 func LoadFont(filename string, size int) *Font {
 	font, err := ttf.OpenFont(filename, size)
 	if err != nil {
-		log.Fatalf("font open fail %v\n", err)
+		log.Fatal("font open fail %v\n", err)
 	}
 	return &Font{
 		Font:  font,
@@ -46,7 +46,7 @@ func (f *Font) MakeSurface(co htmlcolors.RGBA, text string) (*sdl.Surface, sdl.R
 	surface, err := f.Font.RenderUTF8_Blended(text, RGBA2SDL(co))
 	if err != nil {
 		log.Printf("%v %v %v", err, co, text)
-		log.Fatalf("Failed to create surface: %s\n", sdl.GetError())
+		log.Fatal("Failed to create surface: %s\n", sdl.GetError())
 	}
 	srcRect := sdl.Rect{}
 	surface.GetClipRect(&srcRect)
@@ -70,7 +70,7 @@ func (f *Font) MakeTexture(co htmlcolors.RGBA, text string, rend *sdl.Renderer) 
 	defer surface.Free()
 	t, err := rend.CreateTextureFromSurface(surface)
 	if err != nil {
-		log.Fatalf("Failed to create Texture: %s\n", err)
+		log.Fatal("Failed to create Texture: %s\n", err)
 	}
 	return t, srcRect
 }

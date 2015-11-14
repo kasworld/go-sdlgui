@@ -42,12 +42,12 @@ func NewWindow(title string, wx, wy int, show bool) *Window {
 			wx, wy, sdl.WINDOW_HIDDEN)
 	}
 	if err != nil {
-		log.Fatalf("Failed to create window: %s\n", err)
+		log.Fatal("Failed to create window: %s\n", err)
 	}
 	// w.Rend = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_SOFTWARE)
 	w.Rend, err = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_ACCELERATED)
 	if err != nil {
-		log.Fatalf("Failed to create renderer: %s\n", err)
+		log.Fatal("Failed to create renderer: %s\n", err)
 	}
 
 	wr := sdl.Rect{}
