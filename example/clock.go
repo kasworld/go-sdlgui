@@ -37,11 +37,19 @@ type App struct {
 	Stat *actionstat.ActionStat
 }
 
+const (
+	WinW    = 512
+	WinH    = 512
+	ClockW  = 512
+	ClockH  = 512
+	DrawFPS = 30
+)
+
 func NewApp() *App {
 	app := App{
 		SdlCh: make(chan interface{}, 1),
 		Keys:  make(map[sdl.Scancode]bool),
-		Win:   sdlgui.NewWindow("SDL GUI Clock Example", 512, 512, true),
+		Win:   sdlgui.NewWindow("SDL GUI Clock Example", WinW, WinH, true),
 
 		Stat: actionstat.New(),
 	}
@@ -58,7 +66,7 @@ func (app *App) AddControl(c sdlgui.ControlI) {
 // change as app's need
 
 func (g *App) addControls() {
-	g.cl = analogueclock.New(0, 0, 0, 512, 512)
+	g.cl = analogueclock.New(0, 0, 0, ClockW, ClockH)
 	g.AddControl(g.cl)
 }
 
@@ -71,7 +79,7 @@ func (app *App) Run() {
 	sdlgui.SDLEvent2Ch(app.SdlCh)
 
 	timerInfoCh := time.Tick(time.Duration(1000) * time.Millisecond)
-	timerDrawCh := time.Tick(time.Duration(1000/30) * time.Millisecond)
+	timerDrawCh := time.Tick(time.Second / DrawFPS)
 
 	for !app.Quit {
 		select {
