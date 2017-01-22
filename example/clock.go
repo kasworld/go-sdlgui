@@ -88,7 +88,6 @@ func (app *App) Run() {
 				app.Keys.ProcessSDLKeyEvent(data) {
 				app.Quit = true
 			}
-			app.Stat.Inc()
 
 		case <-timerDrawCh:
 			app.cl.SetTime(time.Now())
@@ -96,9 +95,10 @@ func (app *App) Run() {
 				v.DrawSurface()
 			}
 			app.Win.Update()
+			app.Stat.Inc()
 
 		case <-timerInfoCh:
-			log.Info("stat %v", app.Stat)
+			log.Info("FPS %v", app.Stat)
 			app.Stat.UpdateLap()
 		}
 	}
