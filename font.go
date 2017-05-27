@@ -45,7 +45,7 @@ func LoadFont(filename string, size int) *Font {
 func (f *Font) MakeSurface(co htmlcolors.RGBA, text string) (*sdl.Surface, sdl.Rect) {
 	surface, err := f.Font.RenderUTF8_Blended(text, RGBA2SDL(co))
 	if err != nil {
-		log.Printf("%v %v %v", err, co, text)
+		log.Error("%v %v %v", err, co, text)
 		log.Fatal("Failed to create surface: %s\n", sdl.GetError())
 	}
 	srcRect := sdl.Rect{}

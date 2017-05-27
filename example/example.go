@@ -12,7 +12,6 @@
 package main
 
 import (
-	"runtime"
 	"time"
 
 	"github.com/kasworld/actionstat"
@@ -83,14 +82,15 @@ func (g *App) addControls() {
 
 func (app *App) Run() {
 	// need to co-exist sdl lib
-	runtime.LockOSThread()
-	defer runtime.UnlockOSThread()
+	// runtime.LockOSThread()
+	// defer runtime.UnlockOSThread()
 
 	// start sdl event loop
 	sdlgui.SDLEvent2Ch(app.SdlCh)
 
 	timerInfoCh := time.Tick(time.Duration(1000) * time.Millisecond)
 	timerDrawCh := time.Tick(time.Duration(1000/60) * time.Millisecond)
+	// timerDrawCh := time.Tick(time.Microsecond)
 	barlen := 0.0
 
 	for !app.Quit {

@@ -12,7 +12,6 @@
 package main
 
 import (
-	"runtime"
 	"time"
 
 	"github.com/kasworld/actionstat"
@@ -38,11 +37,11 @@ type App struct {
 }
 
 const (
-	WinW    = 512
-	WinH    = 512
-	ClockW  = 512
-	ClockH  = 512
-	DrawFPS = 30
+	WinW    = 2000
+	WinH    = 2000
+	ClockW  = 2000
+	ClockH  = 2000
+	DrawFPS = 100
 )
 
 func NewApp() *App {
@@ -72,8 +71,8 @@ func (g *App) addControls() {
 
 func (app *App) Run() {
 	// need to co-exist sdl lib
-	runtime.LockOSThread()
-	defer runtime.UnlockOSThread()
+	// runtime.LockOSThread()
+	// defer runtime.UnlockOSThread()
 
 	// start sdl event loop
 	sdlgui.SDLEvent2Ch(app.SdlCh)

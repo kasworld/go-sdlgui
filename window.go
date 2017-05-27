@@ -44,7 +44,7 @@ func NewWindow(title string, wx, wy int, show bool) *Window {
 	if err != nil {
 		log.Fatal("Failed to create window: %s\n", err)
 	}
-	// w.Rend = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_SOFTWARE)
+	// w.Rend, err = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_SOFTWARE)
 	w.Rend, err = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_ACCELERATED)
 	if err != nil {
 		log.Fatal("Failed to create renderer: %s\n", err)
