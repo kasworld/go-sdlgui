@@ -12,10 +12,11 @@
 package sdlgui
 
 import (
+	"fmt"
+
 	"github.com/kasworld/go-sdl2/sdl"
 	"github.com/kasworld/go-sdl2/sdl_ttf"
 	"github.com/kasworld/htmlcolors"
-	"github.com/kasworld/log"
 )
 
 func init() {
@@ -35,7 +36,7 @@ type Font struct {
 func LoadFont(filename string, size int) *Font {
 	font, err := ttf.OpenFont(filename, size)
 	if err != nil {
-		log.Fatal("font open fail %v\n", err)
+		fmt.Printf("font open fail %v\n", err)
 	}
 	return &Font{
 		Font:  font,
@@ -45,8 +46,8 @@ func LoadFont(filename string, size int) *Font {
 func (f *Font) MakeSurface(co htmlcolors.RGBA, text string) (*sdl.Surface, sdl.Rect) {
 	surface, err := f.Font.RenderUTF8_Blended(text, RGBA2SDL(co))
 	if err != nil {
-		log.Error("%v %v %v", err, co, text)
-		log.Fatal("Failed to create surface: %s\n", sdl.GetError())
+		fmt.Printf("%v %v %v", err, co, text)
+		fmt.Printf("Failed to create surface: %s\n", sdl.GetError())
 	}
 	srcRect := sdl.Rect{}
 	surface.GetClipRect(&srcRect)
@@ -70,7 +71,7 @@ func (f *Font) MakeTexture(co htmlcolors.RGBA, text string, rend *sdl.Renderer) 
 	defer surface.Free()
 	t, err := rend.CreateTextureFromSurface(surface)
 	if err != nil {
-		log.Fatal("Failed to create Texture: %s\n", err)
+		fmt.Printf("Failed to create Texture: %s\n", err)
 	}
 	return t, srcRect
 }

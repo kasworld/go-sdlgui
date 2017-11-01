@@ -12,11 +12,11 @@
 package sdlgui
 
 import (
+	"fmt"
 	"sort"
 
 	"github.com/kasworld/go-sdl2/sdl"
 	"github.com/kasworld/idgen"
-	"github.com/kasworld/log"
 	"github.com/kasworld/quadtree"
 	"github.com/kasworld/rect"
 )
@@ -42,12 +42,12 @@ func NewWindow(title string, wx, wy int, show bool) *Window {
 			wx, wy, sdl.WINDOW_HIDDEN)
 	}
 	if err != nil {
-		log.Fatal("Failed to create window: %s\n", err)
+		fmt.Printf("Failed to create window: %s\n", err)
 	}
 	// w.Rend, err = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_SOFTWARE)
 	w.Rend, err = sdl.CreateRenderer(w.Win, -1, sdl.RENDERER_ACCELERATED)
 	if err != nil {
-		log.Fatal("Failed to create renderer: %s\n", err)
+		fmt.Printf("Failed to create renderer: %s\n", err)
 	}
 
 	wr := sdl.Rect{}

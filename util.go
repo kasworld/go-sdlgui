@@ -12,10 +12,11 @@
 package sdlgui
 
 import (
+	"fmt"
+
 	"github.com/kasworld/go-sdl2/sdl"
 	"github.com/kasworld/go-sdl2/sdl_image"
 	"github.com/kasworld/htmlcolors"
-	"github.com/kasworld/log"
 	"github.com/kasworld/rect"
 )
 
@@ -39,14 +40,14 @@ func Rect2SdlRect(rt rect.Rect) sdl.Rect {
 func LoadBMP(imageName string) *sdl.Surface {
 	image, err := sdl.LoadBMP(imageName)
 	if err != nil {
-		log.Fatal("Failed to load BMP: %s", err)
+		fmt.Printf("Failed to load BMP: %s", err)
 	}
 	return image
 }
 func LoadImage(imageName string) *sdl.Surface {
 	image, err := img.Load(imageName)
 	if err != nil {
-		log.Fatal("Failed to load Image: %s", err)
+		fmt.Printf("Failed to load Image: %s", err)
 	}
 	return image
 }
